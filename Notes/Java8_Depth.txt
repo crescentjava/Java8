@@ -1,0 +1,743 @@
+1)Lambda Expression
+2)Functional Interfaces
+3)Default methods in interfaces
+4)static methods in interfaces
+5)Predicate-------predefined functional interface
+6)Function-------predefined functional interface
+7)Consumer-------predefined functional interface
+8):: (C++ scope resolution operator)
+  :: Method reference & constructor reference
+  No relation between C++ and Java
+9)Stream API
+10)Date & Time API(Joda API) introduced by joda.org
+
+
+1.0 major version
+  1.1
+1.2
+  1.3
+  1.4
+1.5
+  1.6
+  1.7
+1.8
+
+3 Objectives of Java 8
+----------------------
+1)To simplify programming(very less code)    
+2)To utilize Functional programming benefits in Java.
+  Functional programming in the form Lambda expression.
+  Still Java is object oriented only.
+3)To enable parallel programming
+  so that my program should use multicore processor.
+
+
+
+1)Lambda(->) expression
+Unfortunately Java is almost the last lang to use Lambda expression.
+In 1930 Lambda is introduced in Lambda
+First lang "LISP" which uses Lambda expression
+C
+C++
+Object C
+C#.NET
+SCALA
+RUBY
+Python
+
+Benefits:
+1)To enable functional programming in Java
+2)write more readable,maintainable & concise code
+3)To use APIs very easily & effectively
+4)To enable parallel processing
+
+Anonymous Inner class vs Lambda expression
+-------------------------------------------
+Anonymous Inner class:
+1)It is a class without name
+2)Anonymous Inner class can extend abstract and concrete classes
+3)Anonymous Inner class can implements an interface that contains any number of abstract methods
+4)Inside Anonymous Inner class, we can declare instance variables
+5)Anonymous Inner class can be instantiated.
+6)Inside Anonymous Inner class, "this" always refers current anonymous Inner class object but not outer class object.
+7)Anonymous Inner class is best choice if we want to handle multiple methods.
+8)For the Anonymous Inner class, at the time of compilation a seperate .class file will be generated.
+9)Memory will be allocated on demand whenever we are creating object.
+  (In heap memory)
+
+**don't beleive Lambda expression came to replace Anonymous Inner class**
+ 
+Lambda Expression:
+1)It is a function without name(Anonymous function)
+2)-> expression can't extend abstract and concrete classes
+3)-> expression can implement an interface which contains single abstract method(Functional Interface)
+4)Inside ->exrpession we can't declare instance variables. Whatever variables declared, are considered as local variables.
+5)-> expression cannot be instantiated.
+6)Inside ->expression, "this" always refers current outer class object i.e enclosing class object.
+7)-> expression is the best choice if we want to handle interface with single abstract method.(Functionalinterface)
+8)For the -> expression, at the time of compilation, no seperate .class file will be generated.
+9)-> expression will reside in permanent memory of JVM(Method area)
+
+** whenever new versions come we have to ready with red carpet for welcome **
+
+
+Anonymous Inner class != Lambda expression
+Both are different concept
+
+special case in Lambda expression
+---------------------------------
+interface Interf
+{
+	public void m1();
+}
+public class Test {
+	int x=10;
+	
+	public void m2()
+	{
+		int y=20;
+		Interf i=()->{                     /////////////closure
+			System.out.println(x);
+			//System.out.println(y);
+			System.out.println(this.getClass());
+			x=100;
+			//y=200;//Local variable y defined in an enclosing scope must be final or effectively final
+			//local variables referenced from a lambda expression must be final or effectively final
+		};
+		//y=200;  // you can use this assignment if you are not using in Lambda expression
+		//System.out.println(y);
+		i.m1();
+	}
+
+	public static void main(String[] args) {
+		Test t = new Test();
+		t.m2();
+
+	}
+
+}
+
+
+
+Advantages of Lambda Expression
+-------------------------------
+1)We can enable functional programming in Java
+2)We can reduce the length of the code so that readability will be improved
+3)We can resolve complexity of Anonymous Inner classes until some extent
+4)we can handle procedures/functions just like values
+  just like assigning value to variable, assigning function.
+5)We can pass procedures/functions as arguments
+6)Easier to use updated APIs and Libraries
+  stream apis
+7)Enable support for parallel processing
+  Take the benefit of multicore processor/dual core processor
+
+
+Example : passing function as parameter
+new Thread(()->super("child thread"));
+
+
+
+default methods wrt inheritance
+-------------------------------
+
+interface Left
+{
+  default void m1()
+  {
+     S.o.p("default Left");
+  }
+}
+
+interface Right
+{
+  default void m1()
+  {
+     S.o.p("default Right");
+  }
+}
+
+
+class Test implements Left,Right
+{
+  public void m1()
+  {
+    S.o.p("my own implementation");
+    // or for specific one
+    Left.super.m1();
+  }
+  psvm(String[] args)
+  {
+    Test t = new Test();
+    t.m1();
+  }
+}
+
+Differences between interface with default method and abstract classes
+-------------------------------------------------------------------
+Interface with default method
+-----------------------------
+1)Inside interfaces every variable is always public, static and final. we can not declare instance variables.
+2)Interface never talks about state of object
+3)Inside interface we can't declare constructor
+4)Inside interface we can't declare instance and static block.
+5)Functional interface with default method can refer Lambda expression
+6)Inside interface we can't override Object class method.
+abstract class
+--------------
+1)Inside abstract class we can declare instance variables.
+2)abstract class can talk about state of object
+3)Inside abstract class we can declare constructor
+4)Inside abstract class, we can declare instance and static block.
+5)Abstract class can't refer Lambda expression.
+6)Inside abstract class we can override object class method.
+
+
+Interface with default method != abstract classes
+
+
+Functional interfaces
+---------------------
+
+@FunctionalInterface
+public interface Predicate<T>
+-----------------------------
+boolean	test(T t)   
+Evaluates this predicate on the given argument.
+
+
+@FunctionalInterface
+public interface Consumer<T>
+----------------------------
+void	accept(T t)
+Performs this operation on the given argument.
+
+@FunctionalInterface
+public interface Function<T,R>
+------------------------------
+   R apply(T t)  
+Represents a function that accepts one argument and produces a result.
+
+
+Example:
+--------
+Consumer<String> c= s->S.o.p(s);
+c.accept("Hello");
+c.accept("HelloWorld");
+
+
+Consumer<T> -----T is input type
+void accept(T t)
+
+Supplier<R>------R Return type
+R get()
+
+Supplier<String> s=()->{return "Hello";};
+System.out.println(s.get());
+
+Supplier<String> s=()->{
+
+              String[] s1={"Sonu","Monu","Tonu"};
+              int x = (int)(Math.random()*2+1);
+              return s1[x];
+            };
+System.out.println(s.get());
+System.out.println(s.get());
+System.out.println(s.get());
+
+
+
+Stream
+------
+
+If you want to process the object from collection.
+
+ArrayList<Integer> l = new ArrayList<Integer>();
+l.add(0); l.add(10); l.add(20);
+l.add(5);l.add(15);l.add(25);
+
+
+Without Streams:
+List<Integer> l1 = new ArrayList<Integer>();
+for(Integer i:l)
+{
+   if(i%2==0)
+   {
+      l1.add(i);
+   }
+}
+
+With Stream
+-----------
+List<Integer> l1 = l.stream().filter(I->I%2==0).collect(Collectors.toList());
+System.out.println(l1);
+
+Double the size without using stream(Map)
+-----------------------------------------
+List<Integer> l1 = new ArrayList<>();
+for(Integer I1 : l)
+{
+   l1.add(I1*2);
+}
+System.out.println(l1);
+
+
+
+Double the size using stream(Map)
+---------------------------------
+List<Integer> l1 = l.stream().map(I->I*2).collect(Collectors.toList());
+System.out.println(l1);
+
+Stream summary
+---------------
+1)
+purpose : bulk operation on collection
+2)
+Stream s = c.stream();
+where c is Collection interface and stream is a default method of Collection.
+3)Filter
+ From employee object increment the salary by 5%
+ From studen object, get the student details whose marks>80
+ filter(Predicate<T> t)
+4)map(Function<T,R> f)
+  process every object
+  i)collect()
+  ii)count()
+  iii)sorted()
+  iv)sorted(Comparator c)
+  v)min(Comparator c)
+  vi)max(Comparator c)
+  vii)forEach(Lambda)
+  viii)toArray()
+  ix)Streamof() --for Array
+
+5)Predicate<T>
+6)Function<T,R>
+7)Consumer<T>
+8)Supplier<R>
+9)Method Reference and constructor reference by using ::
+10)Streams
+11)Date & Time API
+
+Example of filter and map with Employee object:
+-----------------------------------------------
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+
+class Employee
+{
+	private String name;
+	private int salary;
+	public Employee(String name, int salary) {
+		super();
+		this.name = name;
+		this.salary = salary;
+	}
+	
+	
+	public String getName() {
+		return name;
+	}
+
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+
+	public int getSalary() {
+		return salary;
+	}
+
+
+	public void setSalary(int salary) {
+		this.salary = salary;
+	}
+
+
+	@Override
+	public String toString() {
+		return "Employee [name=" + name + ", salary=" + salary + "]";
+	}
+	
+	
+}
+
+
+public class FilterTest {
+
+	public static void main(String[] args) {
+		
+		List<Employee> list = new ArrayList<>();
+		list.add(new Employee("Sachin",45000));
+		list.add(new Employee("Nilesh",55000));
+		list.add(new Employee("Sanjay",65000));
+		
+		List filteredList = list.stream().filter(emp->emp.getSalary()>50000).collect(Collectors.toList());
+		System.out.println(filteredList);
+		
+		List revisedSalList = list.stream().map(emp->emp.getSalary()*2).collect(Collectors.toList());
+		System.out.println(revisedSalList);
+	}
+
+}
+
+
+Example 2
+---------
+import java.util.Arrays;
+import java.util.List;
+
+public class NowJava8 {
+
+    public static void main(String[] args) {
+
+        List<Person> persons = Arrays.asList(
+                new Person("Sachin", 30),
+                new Person("Nilesh", 20),
+                new Person("Pankaj", 40)
+        );
+
+        Person result1 = persons.stream()
+                .filter((p) -> "Nilesh".equals(p.getName()) && 20 == p.getAge())
+                .findAny()
+                .orElse(null);
+
+        System.out.println("result 1 :" + result1);
+
+        //or like this
+        Person result2 = persons.stream()
+                .filter(p -> {
+                    if ("Nilesh".equals(p.getName()) && 20 == p.getAge()) {
+                        return true;
+                    }
+                    return false;
+                }).findAny()
+                .orElse(null);
+
+        System.out.println("result 2 :" + result2);
+
+    }
+
+
+}
+
+
+
+Date & Time API
+---------------
+Until 1.7
+  Date
+  Calender
+  Timestamp
+
+Abover classes are not useful wrt performance and convenience
+
+Date and Time api in Java 8 developed by joda.org
+
+LocalDate date = LocalDate.now();
+System.out.println(date);
+
+LocalTime time = LocalTime.now();
+System.out.println(time);
+
+LocalDate and LocalTime under package java.time
+
+Getting individually date,month and year
+----------------------------------------
+LocalDate date = LocalDate.now();
+System.out.println(date);
+int dd = date.getDayOfMonth();
+int mm = date.getMonthValue();
+int yyyy = date.getYear();
+System.out.println(dd+"-"+mm+"-"+yyyy);
+System.out.printf("%d-%d-%d",dd,mm,yyyy);
+
+Getting individually hour,mins,secs,nano secs
+---------------------------------------------
+
+LocalTime time = LocalTime.now();
+int hour = time.getHour();
+int min = time.getMinute();
+int sec = time.getSecond();
+int nanoSec = time.getNano();
+
+System.out.printf("%d:%d:%d:%d",hour,min,sec,nanoSec);
+
+
+LocalDateTime
+--------------
+Can handle both date and time
+LocalDateTime dt = LocalDateTime.now();
+System.out.println(dt);
+int dd=dt.getDayOfMonth();
+int mm=dt.getMonthValue();
+int yy=dt.getYear();
+System.out.printf("Date : %d-%d-%d",dd,mm,yy);
+int h=dt.getHour();
+int m=dt.getMinute();
+int s=dt.getSecond();
+int n=dt.getNano();
+System.out.printf("\nTime:%d:%d:%d:%d",h,m,s,n);
+
+
+
+
+If you want to hold say joining date or birthdate (not current date and time)
+
+LocalDateTime dt = LocalDateTime.of(yy,mm,dd,h,m,s,n)
+
+LocalDateTime dt = LocalDateTime.of(1995,05,24,11,45);
+// you can take Month.May instead of 05 
+System.out.println("After six months :"+dt.plusMonths(6));
+System.out.println("After six months :"+dt.minusMonths(6));
+System.out.println(dt);
+
+
+Period
+------
+LocalDate birthday = LocalDate.of(1982,10,04);
+				LocalDate today=LocalDate.now();
+				Period p =Period.between(birthday,today);
+				System.out.printf("Your age is %d years %d months %d days",p.getYears(),p.getMonths(),p.getDays());
+
+
+Year
+----
+2020 is a Leap year : divisible by 4
+
+Scanner sc = new Scanner(System.in);
+System.out.println("Enter year");
+int n = sc.nextInt();
+Year y=Year.of(n);
+if(y.isLeap())
+{
+  System.out.printf("%d year is Leap year",n);
+}
+else
+{
+  System.out.printf("%d year is not Leap Year",n);
+}
+
+
+ZoneId
+------
+for Internationalization ZoneId is used.
+
+ZoneId zone = ZoneId.systemDefault();
+System.out.println(zone);
+
+create diff zone:
+ZoneId la=ZoneId.of("America/Los_Angeles");
+
+ZonedDateTime dt = ZonedDateTime.now(la);
+System.out.println(dt);
+
+
+Date Time api summary(Joda Time API) as it is developed by JODA.org people
+---------------------
+1)LocalDate
+   Methods : getDayOfMonth(), getMonthValue(), getYear()
+2)LocalTime
+   Methods : getHour(), getMinute(), getSecond(), getNano()
+3)LocalDateTime
+   
+4)Period
+  To represent time duration between two dates
+5)Year
+  Whether a give year is Leap year or not
+6)ZoneId
+7)ZonedDateTime
+  In a particular zone what is date and time
+
+
+Java 1.8 version new features Summary
+-------------------------------------
+-------------------------------------
+1)Lambda Expression
+  Square of a number without Lambda:
+  public int square(int n)
+  {
+    return n*n;
+  }
+
+  Square of a number with Lambda:
+  Lambda expression doesn't require:
+   method name
+   return type
+   access modifier
+   parameter type
+   return keyword
+  
+  n->n*n;
+
+  Lambda expression : to enable functional programming
+                      to simplify programming
+2)Functional Interface
+  should contain exactly one abstract method
+  may have multiple default and static methods
+ Examples :
+  Comparable - compareTo()
+  Runnable - run()
+  Callable - call()
+  ActionListener - actionPerformed()
+  
+  interface Interf
+  {
+     int square(int n);
+  }
+
+  Interf i= n->n*n;
+  System.out.println(i.square(10));
+  System.out.println(i.square(20));
+3)default methods in Interface
+  why - to provide dummy implementation
+  what id advantage -
+    without affecting implementation happily we can add default methods in interface.
+4)static methods in interface
+  interface x
+  {
+     public static void main(String[] args)
+     {..}
+  }
+
+You can run using only interface
+5)Predefined functional Interfaces
+  Predicate under package java.util.function
+   -takes input and return boolean value
+   interface Predicate<T>
+   {
+        public boolean test(T t);
+   }
+  Function
+   -avg  sal of all employees and return some value
+   -return value could be anything
+   -two parameters - input and return
+   interface Function<T,R>
+   {
+      public R apply(T t);
+   }
+  Consumer
+   - exactly same as function but Consumer won't return any value
+   interface Consumer<T>
+   {
+      public void accept(T t);
+   }
+  Supplier
+    -get the value
+  interface supplier<R>
+  {
+     public R get();
+  }
+
+6)::
+  To implement Method Reference and Constructor Reference
+  Interf i=Test::m1;
+
+  where m1 method is doing the same job what Lambda expresson is doing.
+  Biggest advantage - code reusability
+
+  Test::new -----------constructor reference
+
+7)Streams
+  If you want process objects from the collection
+
+  Stream s = c.stream();
+   where
+   stream is a default method present in a Collection interface.
+   
+   filter() - boolean condition
+   map()
+   collect()
+   count()
+   min(Comparator c)
+   max(Comparator c)
+   sorted()-----------natual sorting
+   sorted(Comparator c)---------customized sorting
+   forEach(Lambda expression)
+   toArray()-----to convert element present in stream into array
+
+** Stream can be applied to group of values and arrays also **
+   Stream.of()
+
+8)Date & Time API(JODA Time API)
+  
+  Date and Calender
+  Problems - not up to the mark performancewise and convenience
+ 
+  LocalDate
+  LocalTime
+  LocalDateTime
+  Period
+  Year
+  ZoneId
+  ZonedDateTime
+
+   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+   
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+

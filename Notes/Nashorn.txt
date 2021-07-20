@@ -1,0 +1,98 @@
+Project Nashorn in Java 8
+Javascript as a first-class language on the JVM
+
+
+What is Nashorn?
+Oracle's runtime for ECMAScript 5.1 on the JVM
+GPL licensed
+Part of OpenJDK
+Slated for Java 8 release
+
+Why Nashorn?
+Atwood's Law at work
+It's Oracle's own proving ground for Java platform support for dynamic languages.
+Designed for secure execution. It will ship as JRE,thus privileged code.(Rhino was never designed for that)
+ECMA Script 5.1 only. No backwards compatibility liabilites.
+
+
+How is it different from Rhino?
+
+All code is compiled to bytecode. There is no interpreter.
+Thus, no Rhino-style continuations either.
+JSR-223 javax.script.* is the only public API
+Only implements ECMAScript 5.1 spec, but it implements that one 100%
+
+
+Where is it?
+-Ships with Java 8 EA builds,starting from b82.
+-Command line shell in $JAVA_HOME/bin/jjs
+-It's an extension JAR in jre/lib/ext/nashorn.jar
+
+Simplest Java-to-JavaScript
+---------------------------
+import javax.script.*;
+
+public class RunScript{
+  public static void main(String[] args) throws ScriptException{
+    System.out.println(
+              new ScriptEngineManager()
+               .getEngineByName("nashorn")
+               .eval("function f(x) {return x<2?1:f(x-1)*x} f(5)"));
+   }
+}
+
+
+Invoking multiple times
+------------------------
+import javax.script.*;
+
+public class RunScript{
+  public static void main(String[] args) throws ScriptException{
+     ScriptEngine e = new ScriptEngineManager().getEngineByName("nashorn");
+
+     e.eval("function f(x) {return x<2 ? 1: f(x-1)*x}");
+
+     Invocable i = (Invocable)e;
+
+     System.out.println(i.invokeFunction("f", new Object[]{"5"}));
+     System.out.println(i.invokeFunction("f", new Object[]{"10"}));
+  }
+}
+
+Nashorn is "just" Javascript
+It "just works" - as a Javascript runtime
+
+JVM as the discriminating feature
+---------------------------------
+There's one thing that differentiates Nashorn from other Javascript runtimes out there.
+It runs on the JVM
+There's additional functionality for interoperating with the platform.
+
+
+Java platform integration
+-------------------------
+-Can create and manipulate Java objects from Javascript
+-Can extend java classes and implement Java interfaces from Javascript.
+-We tried to make it as straightforward and intuitive as possible.
+
+Many ways to construct a list
+-----------------------------
+var list = new java.util.ArrayList()
+
+var ArrayList = java.util.ArrayList
+var list = new ArrayList()
+
+var ArrayList = Java.type("java.util.ArrayList");
+var list = new ArrayList()
+
+
+
+
+
+
+
+
+
+
+
+

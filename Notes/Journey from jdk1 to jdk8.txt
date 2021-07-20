@@ -1,0 +1,113 @@
+
+
+1.0
+
+
+Object
+Vector
+Hashtable
+Properties
+Dictionary
+
+
+1.2
+Set
+List
+Collection
+LinkedList...
+TreeSet
+
+
+1.4
+LinkedHashSet
+LinkedHashMap
+assert
+
+
+1.5
+Generic
+Autoboxing  autounboxing
+annotation
+enum
+for each/enhanced for loop
+static import
+covariant
+var args
+BlockingQueue
+PriorityQueue
+
+Concurrent package
+ConcurrentHashMap
+CopyOnWriteArrayList
+CopyOnWriteArraySet
+
+Lock
+ReentrantLock
+Executor Framework
+Callable
+
+
+
+1.6
+NavigableMap
+NavigableSet
+Deque
+web service apis
+
+
+1.7
+mutiple exception in a single catch
+try with resources
+String choice in switch case
+binary literal
+underscore in number
+
+1.8
+Lambda expression - Adds functional processing capability to Java.
+
+Method references - Referencing functions by their names instead of invoking them directly. Using functions as parameter.
+
+Default method - Interface to have default method implementation.
+static method
+
+New tools - New compiler tools and utilities are added like ‘jdeps’ to figure out dependencies.
+
+Stream and Collectors
+
+Stream API - New stream API to facilitate pipeline processing.
+
+Date Time API - Improved date time API.
+
+Optional - Emphasis on best practices to handle null values properly.
+
+Nashorn, JavaScript Engine - A Java-based engine to execute JavaScript code.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
