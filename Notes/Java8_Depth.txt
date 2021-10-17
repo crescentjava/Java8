@@ -245,7 +245,17 @@ System.out.println(s.get());
 System.out.println(s.get());
 System.out.println(s.get());
 
-
+Supplier<String> s=()->"Hello";
+System.out.println(s.get());
+		
+Consumer<String> c=x->System.out.println(x);
+c.accept("Hello");
+		
+Predicate<Integer> pr = p->p>10;
+System.out.println(pr.test(90));
+		
+Function<Integer,Integer> fn=f->f*f;
+System.out.println(fn.apply(8));
 
 Stream
 ------
